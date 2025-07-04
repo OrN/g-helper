@@ -158,16 +158,16 @@ public class AsusACPI
     public const int GPUModeStandard = 1;
     public const int GPUModeUltimate = 2;
 
-    public const int MinTotal = 5;
+    public const int MinTotal = 3;
 
     public static int MaxTotal = 150;
     public static int DefaultTotal = 80;
 
-    public const int MinCPU = 5;
+    public const int MinCPU = 3;
     public const int MaxCPU = 100;
     public const int DefaultCPU = 80;
 
-    public const int MinGPUBoost = 5;
+    public const int MinGPUBoost = 3;
     public static int MaxGPUBoost = 25;
 
     public static int MinGPUPower = 0;
