@@ -45,7 +45,6 @@ namespace GHelper
 
         bool isGpuSection = true;
 
-        bool rateMouseOver = false;
         bool batteryMouseOver = false;
         bool batteryFullMouseOver = false;
 
@@ -241,8 +240,6 @@ namespace GHelper
             labelCharge.MouseEnter += PanelBattery_MouseEnter;
             labelCharge.MouseLeave += PanelBattery_MouseLeave;
             labelBattery.Click += LabelBattery_Click;
-            labelBattery.MouseEnter += LabelBattery_MouseEnter;
-            labelBattery.MouseLeave += LabelBattery_MouseLeave;
 
             buttonPeripheral1.Click += ButtonPeripheral_Click;
             buttonPeripheral2.Click += ButtonPeripheral_Click;
@@ -297,18 +294,6 @@ namespace GHelper
         private void LabelBattery_Click(object? sender, EventArgs e)
         {
             HardwareControl.chargeWatt = !HardwareControl.chargeWatt;
-            RefreshSensors(true);
-        }
-
-        private void LabelBattery_MouseEnter(object? sender, EventArgs e)
-        {
-            rateMouseOver = true;
-            RefreshSensors(true);
-        }
-
-        private void LabelBattery_MouseLeave(object? sender, EventArgs e)
-        {
-            rateMouseOver = false;
             RefreshSensors(true);
         }
 
@@ -1511,11 +1496,11 @@ namespace GHelper
             try
             {
                 double hoursRemaining = Math.Abs((double)((remaining / 1000) / HardwareControl.batteryRate));
-                return String.Format("Time Remaining: {0}h {1}m", Math.Floor(hoursRemaining), Math.Round((hoursRemaining % 1) * 60, 0));
+                return String.Format(" ({0}h {1}m)", Math.Floor(hoursRemaining), Math.Floor((hoursRemaining % 1) * 60));
             }
             catch
             {
-                return "Time Remaining: Unknown";
+                return "";
             }
         }
 
@@ -1542,17 +1527,12 @@ namespace GHelper
             {
                 charge = Properties.Strings.BatteryCharge + ": " + HardwareControl.batteryCharge;
             }
-            if (rateMouseOver)
-            {
-                battery = battTime;
-            }
-            else
-            {
-                if (HardwareControl.batteryRate < 0)
-                    battery = Properties.Strings.Discharging + ": " + Math.Round(-(decimal)HardwareControl.batteryRate, 1).ToString() + "W";
-                else if (HardwareControl.batteryRate > 0)
-                    battery = Properties.Strings.Charging + ": " + Math.Round((decimal)HardwareControl.batteryRate, 1).ToString() + "W";
-            }
+
+            if (HardwareControl.batteryRate < 0)
+                battery = Properties.Strings.Discharging + ": " + Math.Round(-(decimal)HardwareControl.batteryRate, 1).ToString() + "W";
+            else if (HardwareControl.batteryRate > 0)
+                battery = Properties.Strings.Charging + ": " + Math.Round((decimal)HardwareControl.batteryRate, 1).ToString() + "W";
+            battery += battTime;
 
             if (HardwareControl.gpuTemp > 0)
             {
@@ -1561,7 +1541,7 @@ namespace GHelper
 
             string trayTip = "CPU" + cpuTemp + " " + HardwareControl.cpuFan;
             if (gpuTemp.Length > 0) trayTip += "\nGPU" + gpuTemp + " " + HardwareControl.gpuFan;
-            if (battery.Length > 0) trayTip += "\n" + battery + "\n" + battTime;
+            if (battery.Length > 0) trayTip += "\n" + battery;
             
 
             if (Program.settingsForm.IsHandleCreated)
