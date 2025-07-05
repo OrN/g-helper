@@ -1450,7 +1450,7 @@ namespace GHelper
             try
             {
                 double hoursRemaining = Math.Abs((double)((remaining / 1000) / HardwareControl.batteryRate));
-                return String.Format(" ({0}h {1}m)", Math.Floor(hoursRemaining), Math.Round((hoursRemaining % 1) * 60, 0));
+                return String.Format(" ({0}h {1}m)", Math.Floor(hoursRemaining), Math.Floor((hoursRemaining % 1) * 60));
             }
             catch
             {
